@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kedarnath Tour Guide — From Surat</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Leaflet CSS for Interactive Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
 <style>
   :root {
     --saffron: #E8611A;
@@ -31,6 +35,10 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: var(--sans); background: var(--page-bg); color: var(--dark); line-height: 1.7; font-size: 15px; }
+
+  /* PROGRESS BAR */
+  #progress-container { width: 100%; height: 4px; background: rgba(0,0,0,0.05); position: fixed; top: 0; z-index: 2000; }
+  #progress-bar { height: 4px; background: var(--saffron); width: 0%; transition: width 0.1s; }
 
   /* HERO */
   .hero {
@@ -119,6 +127,18 @@
   .tag-heli { background: #F0E6FF; color: #6A35B8; }
   .tag-stay { background: #E6F9FF; color: #1A7A8A; }
 
+  /* MAP SECTION */
+  .map-wrapper {
+    background: var(--card-bg); border: 1px solid var(--light-border); border-radius: 16px;
+    padding: 1.5rem; margin-top: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  }
+  #interactive-map {
+    width: 100%; height: 50vh; min-height: 400px; border-radius: 12px; z-index: 1; border: 1px solid var(--light-border);
+  }
+  .leaflet-popup-content-wrapper { background: var(--card-bg); color: var(--dark); border: 1px solid var(--light-border); border-radius: 8px; }
+  .popup-title { font-family: var(--serif); font-size: 1.1rem; color: var(--forest); font-weight: 700; margin-bottom: 4px; }
+  .custom-marker { background: var(--card-bg); border: 2px solid var(--saffron); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+
   /* ITINERARY */
   .day-card {
     background: var(--card-bg); border: 1px solid var(--light-border); border-radius: 16px;
@@ -145,6 +165,14 @@
   }
   .activity-list li strong { color: var(--dark); }
 
+  /* FLY TO BUTTON */
+  .fly-to-btn {
+    background: var(--saffron-light); color: var(--saffron); border: 1px solid rgba(232,97,26,0.3);
+    border-radius: 100px; padding: 6px 14px; font-size: 11px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; margin-left: auto; letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .fly-to-btn:hover { background: var(--saffron); color: white; transform: translateY(-1px); }
+
   /* ALERT BOX */
   .alert {
     border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; display: flex; gap: 1rem;
@@ -168,14 +196,21 @@
   .checklist li {
     padding: 9px 0; border-bottom: 1px dashed var(--light-border); font-size: 0.9rem;
     color: var(--mid); display: flex; align-items: flex-start; gap: 0.75rem;
+    cursor: pointer; transition: all 0.2s;
   }
+  .checklist li:hover { background: rgba(0,0,0,0.02); border-radius: 4px; }
   .checklist li:last-child { border-bottom: none; }
   .check-box {
     width: 18px; height: 18px; min-width: 18px; border: 1.5px solid var(--light-border);
-    border-radius: 4px; margin-top: 2px; background: white;
+    border-radius: 4px; margin-top: 2px; background: white; transition: all 0.2s;
   }
-  .checklist li strong { color: var(--dark); display: block; font-size: 0.85rem; }
+  .checklist li strong { color: var(--dark); display: block; font-size: 0.85rem; transition: color 0.2s; }
   .checklist li span { color: var(--stone); font-size: 0.82rem; }
+
+  /* Checklist Active State */
+  .checklist li.packed { text-decoration: line-through; opacity: 0.5; }
+  .checklist li.packed .check-box { background: var(--forest); border-color: var(--forest); position: relative; }
+  .checklist li.packed .check-box::after { content: '✓'; color: white; position: absolute; font-size: 12px; top: -2px; left: 2px; font-weight: bold;}
 
   /* BUDGET TABLE */
   .budget-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
@@ -228,13 +263,21 @@
     position: sticky; top: 0; z-index: 100; background: rgba(250,248,245,0.95);
     backdrop-filter: blur(12px); border-bottom: 1px solid var(--light-border); padding: 0.75rem 0;
   }
-  .nav-inner { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav-inner { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; flex: 1; align-items: center; }
   .nav-inner::-webkit-scrollbar { display: none; }
   .nav-link {
     white-space: nowrap; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--stone);
     text-decoration: none; border-radius: 8px; transition: all 0.15s;
   }
   .nav-link:hover { color: var(--dark); background: var(--snow); }
+  
+  .print-btn {
+    background: var(--forest); color: white; border: none; border-radius: 100px;
+    padding: 6px 16px; font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.1em; cursor: pointer; transition: background 0.2s;
+    display: flex; align-items: center; gap: 6px; white-space: nowrap; margin-left: 20px;
+  }
+  .print-btn:hover { background: var(--forest-mid); }
 
   /* TIPS BOX */
   .tip-box {
@@ -259,6 +302,18 @@
   .contact-row:last-child { border-bottom: none; }
   .contact-row span:first-child { color: var(--mid); }
   .contact-row span:last-child { font-weight: 600; color: var(--danger); }
+
+  /* FLOATING BACK TO TOP */
+  #backToTop {
+    position: fixed; bottom: 30px; right: 30px; background: var(--forest);
+    color: white; border: none; width: 45px; height: 45px; border-radius: 50%;
+    font-size: 20px; cursor: pointer; box-shadow: 0 4px 12px rgba(45,90,39,0.4);
+    opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    transform: translateY(20px);
+  }
+  #backToTop.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  #backToTop:hover { background: var(--forest-mid); transform: translateY(-3px); }
 
   /* FOOTER */
   footer {
@@ -287,9 +342,28 @@
   .badge-rec { background: var(--forest-light); color: var(--forest); }
   .badge-warn { background: var(--gold-light); color: var(--gold); }
   .badge-alt { background: var(--sky-light); color: var(--sky); }
+
+  /* PRINT CSS */
+  @media print {
+    body { background: white; color: black; font-size: 11pt; }
+    .hero, .nav, .map-wrapper, #progress-container, .fly-to-btn, #backToTop, .alert-icon { display: none !important; }
+    .section-title { color: black !important; font-size: 20pt !important; }
+    .card, .day-card, .alert, .budget-table, .highlight-box { border: 1px solid #ccc !important; box-shadow: none !important; break-inside: avoid; }
+    .day-header { background: white !important; border-bottom: 1px solid #ccc !important; }
+    .day-num { color: black !important; }
+    .route-num { border: 1px solid black !important; background: white !important; color: black !important; }
+    a { text-decoration: none !important; color: black !important; }
+    @page { margin: 1cm; }
+  }
 </style>
 </head>
 <body>
+
+<div id="progress-container"><div id="progress-bar"></div></div>
+
+<button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll to Top">
+  ↑
+</button>
 
 <!-- HERO -->
 <div class="hero">
@@ -307,10 +381,10 @@
 
 <!-- STICKY NAV -->
 <nav class="nav">
-  <div class="container">
+  <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
     <div class="nav-inner">
       <a class="nav-link" href="#overview">Overview</a>
-      <a class="nav-link" href="#route">Route from Surat</a>
+      <a class="nav-link" href="#route">Route Map</a>
       <a class="nav-link" href="#itinerary">Day Itinerary</a>
       <a class="nav-link" href="#temple">Temple Info</a>
       <a class="nav-link" href="#trek">Trek Guide</a>
@@ -320,8 +394,8 @@
       <a class="nav-link" href="#safety">Safety</a>
       <a class="nav-link" href="#budget">Budget</a>
       <a class="nav-link" href="#tips">Pro Tips</a>
-      <a class="nav-link" href="#emergency">Emergency</a>
     </div>
+    <button class="print-btn" onclick="window.print()">🖨️ Save PDF</button>
   </div>
 </nav>
 
@@ -362,7 +436,7 @@
 
 <hr class="divider">
 
-<!-- ROUTE FROM SURAT -->
+<!-- ROUTE FROM SURAT + MAP -->
 <section class="section" id="route">
   <div class="container">
     <div class="section-label">Getting There</div>
@@ -394,8 +468,15 @@
       </div>
     </div>
 
+    <!-- INTERACTIVE MAP SECTION -->
+    <div class="map-wrapper">
+      <h3 style="font-family: var(--serif); margin-bottom: 1rem;">Interactive Expedition Map</h3>
+      <p style="font-size: 0.9rem; color: var(--mid); margin-bottom: 1rem;">Trace your topological journey from the foothills of Rishikesh to the steep ascents of the Kedar valley.</p>
+      <div id="interactive-map"></div>
+    </div>
+
     <!-- STEP BY STEP ROUTE -->
-    <div class="card" style="padding: 1.5rem 2rem;">
+    <div class="card" style="padding: 1.5rem 2rem; margin-top: 2.5rem;">
       <h3 style="margin-bottom: 1.25rem; font-family: var(--serif);">Step-by-Step Route (Train Option)</h3>
       <div class="route-step">
         <div class="route-num">1</div>
@@ -463,7 +544,11 @@
     <div class="day-card">
       <div class="day-header">
         <div class="day-num">01</div>
-        <div><div class="day-title">Surat → Board Train to Haridwar</div><div class="day-subtitle">Departure Day</div></div>
+        <div style="flex-grow: 1;">
+          <div class="day-title">Surat → Board Train to Haridwar</div>
+          <div class="day-subtitle">Departure Day</div>
+        </div>
+        <button class="fly-to-btn" onclick="flyToMap(21.1636, 72.8407)">📍 View Surat</button>
       </div>
       <div class="day-body">
         <ul class="activity-list">
@@ -477,7 +562,11 @@
     <div class="day-card">
       <div class="day-header">
         <div class="day-num">02</div>
-        <div><div class="day-title">Arrive Haridwar → Visit Rishikesh</div><div class="day-subtitle">Haridwar/Rishikesh · Acclimatize</div></div>
+        <div style="flex-grow: 1;">
+          <div class="day-title">Arrive Haridwar → Visit Rishikesh</div>
+          <div class="day-subtitle">Haridwar/Rishikesh · Acclimatize</div>
+        </div>
+        <button class="fly-to-btn" onclick="flyToMap(30.0869, 78.2676)">📍 View Rishikesh</button>
       </div>
       <div class="day-body">
         <ul class="activity-list">
@@ -493,15 +582,18 @@
     <div class="day-card">
       <div class="day-header">
         <div class="day-num">03</div>
-        <div><div class="day-title">Rishikesh → Rudraprayag</div><div class="day-subtitle">~145 km · Mountain Entry</div></div>
+        <div style="flex-grow: 1;">
+          <div class="day-title">Rishikesh → Rudraprayag / Guptkashi</div>
+          <div class="day-subtitle">Mountain Entry</div>
+        </div>
+        <button class="fly-to-btn" onclick="flyToMap(30.5234, 79.0789)">📍 View Guptkashi</button>
       </div>
       <div class="day-body">
         <ul class="activity-list">
           <li><strong>Early morning:</strong> Depart Rishikesh by 6–7 AM. Roads get congested after 9 AM</li>
           <li><strong>En route stop:</strong> Devprayag — confluence of Alaknanda & Bhagirathi forming the Ganga. Stunning viewpoint</li>
-          <li><strong>Arrive Rudraprayag:</strong> Visit Rudraprayag confluence (Mandakini + Alaknanda). Explore the small town</li>
-          <li><strong>Evening:</strong> Rudra temple visit. Good local dhabas serving hot meals</li>
-          <li><strong>Stay:</strong> Rudraprayag — important for altitude adjustment (895m elevation)</li>
+          <li><strong>Mountain Drive:</strong> Pass through Rudraprayag, Augustmuni, Ukhimath</li>
+          <li><strong>Stay:</strong> Guptkashi or Phata (Helipad base) — important for altitude adjustment</li>
         </ul>
       </div>
     </div>
@@ -509,12 +601,14 @@
     <div class="day-card">
       <div class="day-header">
         <div class="day-num">04</div>
-        <div><div class="day-title">Rudraprayag → Gaurikund</div><div class="day-subtitle">~75 km · Base Camp Arrival</div></div>
+        <div style="flex-grow: 1;">
+          <div class="day-title">Guptkashi → Sonprayag → Gaurikund</div>
+          <div class="day-subtitle">Base Camp Arrival</div>
+        </div>
+        <button class="fly-to-btn" onclick="flyToMap(30.6521, 79.0236)">📍 View Gaurikund</button>
       </div>
       <div class="day-body">
         <ul class="activity-list">
-          <li><strong>Morning:</strong> Depart by 7 AM. Pass through Augustmuni, Ukhimath (Kedarnath's winter abode), Kund, Sitapur</li>
-          <li><strong>Stop at Guptkashi:</strong> Ardhnareshwar Temple and Vishwanath Temple. Good lunch options here</li>
           <li><strong>Sonprayag:</strong> Register for the trek (biometric registration mandatory with Aadhaar). Pay entry fee (₹50/person). Park vehicles here</li>
           <li><strong>Shuttle to Gaurikund:</strong> 7 km by government shuttle (₹40/person). Gauri Kund — hot water spring, Gauri temple</li>
           <li><strong>Evening prep:</strong> Arrange ponies/palki if needed. Buy trekking gear/raincoat if not packed. Early rest — trek day tomorrow!</li>
@@ -526,20 +620,21 @@
     <div class="day-card" style="border-color: var(--saffron); border-width: 2px;">
       <div class="day-header" style="background: linear-gradient(135deg, #FFF0E6, #FFF8F2);">
         <div class="day-num" style="color: var(--saffron);">05</div>
-        <div>
+        <div style="flex-grow: 1;">
           <div class="day-title" style="color: var(--saffron);">TREK DAY — Gaurikund to Kedarnath</div>
           <div class="day-subtitle" style="color: var(--saffron-mid);">16 km trek · 3,583m elevation · The Highlight!</div>
         </div>
+        <button class="fly-to-btn" style="background: white; border-color: var(--saffron);" onclick="flyToMap(30.7352, 79.0669)">📍 View Temple</button>
       </div>
       <div class="day-body">
         <ul class="activity-list">
           <li><strong>4:00 AM Wake up:</strong> Early start is essential. Crowd increases significantly after 7 AM</li>
-          <li><strong>5:00 AM Start trek:</strong> From Gaurikund (1,982m). Key waypoints — Jungle Chatti (4 km), Bheembali (6 km), Lincholi (9 km), Kedarnath Base (13 km), Temple (16 km)</li>
+          <li><strong>5:00 AM Start trek:</strong> From Gaurikund (1,982m). Key waypoints — Jungle Chatti, Bheembali, Lincholi</li>
           <li><strong>Pony/Palki option:</strong> ₹2,500–₹4,500 one way. Book at Gaurikund official counters only</li>
-          <li><strong>Helicopter option:</strong> From Phata (nearest) or Sirsi helipads — ₹3,500–₹5,000/person one way. Book weeks in advance online at <em>irctc.co.in</em></li>
+          <li><strong>Helicopter option:</strong> From Phata/Sirsi helipads. Book weeks in advance online at <em>irctc.co.in</em></li>
           <li><strong>Reach Kedarnath:</strong> By 12–1 PM ideally. Check in to pre-booked camp/lodge</li>
-          <li><strong>Evening:</strong> Attend the magnificent Kedarnath Aarti (7:30–8:30 PM). This is unmissable — the energy is divine</li>
-          <li><strong>Stay overnight:</strong> At Kedarnath — GMVN, private tents, or guesthouses</li>
+          <li><strong>Evening:</strong> Attend the magnificent Kedarnath Aarti (7:30–8:30 PM). This is unmissable</li>
+          <li><strong>Stay overnight:</strong> At Kedarnath — GMVN, private tents, or guesthouses (Very Cold!)</li>
         </ul>
       </div>
     </div>
@@ -547,20 +642,18 @@
     <div class="day-card" style="border-color: var(--gold); border-width: 2px;">
       <div class="day-header" style="background: var(--gold-light);">
         <div class="day-num" style="color: var(--gold);">06</div>
-        <div>
-          <div class="day-title" style="color: var(--gold);">Kedarnath Darshan + Nearby Sights</div>
-          <div class="day-subtitle" style="color: #B8901A;">Main Devotion Day</div>
+        <div style="flex-grow: 1;">
+          <div class="day-title" style="color: var(--gold);">Kedarnath Darshan + Descent</div>
+          <div class="day-subtitle" style="color: #B8901A;">Devotion & Return</div>
         </div>
       </div>
       <div class="day-body">
         <ul class="activity-list">
-          <li><strong>4:00 AM — 5:00 AM:</strong> <strong>Abhishek Puja</strong> — special early morning ritual at the temple. Book in advance for VIP darshan</li>
-          <li><strong>Morning Darshan:</strong> Queue management is strict. Token system usually in place — collect tokens the previous evening</li>
-          <li><strong>10 AM onwards:</strong> Trek to <strong>Bhairavnath Temple</strong> (1.5 km uphill from main temple). Outstanding 360° Himalayan views</li>
-          <li><strong>Afternoon:</strong> Visit <strong>Gandhi Sarovar (Chorabari Lake)</strong> — 3 km from temple. Sacred lake where Gandhi's ashes were immersed</li>
-          <li><strong>Evening:</strong> Second darshan, sit by the Mandakini river, soak in the spiritual atmosphere</li>
-          <li><strong>Aarti again:</strong> Second time attending the evening aarti — each time is unique and emotional</li>
-          <li><strong>Night:</strong> Rest. Temperatures drop to near freezing — extra blankets needed</li>
+          <li><strong>4:00 AM — 5:00 AM:</strong> <strong>Abhishek Puja / Darshan</strong> — Queue management is strict</li>
+          <li><strong>10 AM onwards:</strong> Trek to <strong>Bhairavnath Temple</strong> (1.5 km uphill). Outstanding 360° views</li>
+          <li><strong>Afternoon:</strong> Begin descent to Gaurikund. Descent is faster but harder on knees — use trekking poles</li>
+          <li><strong>Arrive Gaurikund by 5 PM.</strong> Take shuttle to Sonprayag, then taxi to Guptkashi</li>
+          <li><strong>Stay:</strong> Guptkashi — Rest, hot meal, hot shower — heaven after the trek!</li>
         </ul>
       </div>
     </div>
@@ -568,15 +661,16 @@
     <div class="day-card">
       <div class="day-header">
         <div class="day-num">07</div>
-        <div><div class="day-title">Kedarnath → Descent → Guptkashi</div><div class="day-subtitle">Return Journey Begins</div></div>
+        <div style="flex-grow: 1;">
+          <div class="day-title">Guptkashi → Haridwar</div>
+          <div class="day-subtitle">Return to Foothills</div>
+        </div>
       </div>
       <div class="day-body">
         <ul class="activity-list">
-          <li><strong>5:00 AM:</strong> Final morning darshan and prasad</li>
-          <li><strong>7:00 AM:</strong> Begin descent to Gaurikund. Descent is faster but harder on knees — use trekking poles</li>
-          <li><strong>Arrive Gaurikund by 1–2 PM.</strong> Take shuttle to Sonprayag, then taxi to Guptkashi</li>
-          <li><strong>Guptkashi:</strong> Rest, hot meal, hot shower — heaven after the trek! Visit Ardhnareshwar temple</li>
-          <li><strong>Stay:</strong> Guptkashi — good hotel options, comfortable beds!</li>
+          <li><strong>Morning:</strong> Drive from Guptkashi to Haridwar (~190 km, 6–7 hrs)</li>
+          <li><strong>Haridwar:</strong> Last Ganga Aarti at Har Ki Pauri. Shopping — rudraksha, herbs, trinkets</li>
+          <li><strong>Stay:</strong> Haridwar</li>
         </ul>
       </div>
     </div>
@@ -584,14 +678,17 @@
     <div class="day-card">
       <div class="day-header">
         <div class="day-num">08</div>
-        <div><div class="day-title">Guptkashi → Haridwar → Train to Surat</div><div class="day-subtitle">Homeward Bound</div></div>
+        <div style="flex-grow: 1;">
+          <div class="day-title">Haridwar → Train to Surat</div>
+          <div class="day-subtitle">Homeward Bound</div>
+        </div>
+        <button class="fly-to-btn" onclick="flyToMap(21.1636, 72.8407)">📍 View Surat</button>
       </div>
       <div class="day-body">
         <ul class="activity-list">
-          <li><strong>Morning:</strong> Drive from Guptkashi to Haridwar (~190 km, 6–7 hrs)</li>
-          <li><strong>Haridwar:</strong> Last Ganga Aarti at Har Ki Pauri. Shopping — rudraksha, Uttarakhand herbs, trinkets</li>
-          <li><strong>Evening/Night:</strong> Board return train to Surat. Arrive Surat on Day 9</li>
-          <li><strong>Optional extension:</strong> Add Badrinath (Day 8–9) if time permits — only 100 km from Rudraprayag</li>
+          <li><strong>Morning:</strong> Board return train to Surat from Haridwar/Dehradun</li>
+          <li><strong>Journey:</strong> Rest your exhausted legs on the long journey home</li>
+          <li><strong>Arrive Surat:</strong> On Day 9, carrying the blessings of Shiva with you</li>
         </ul>
       </div>
     </div>
@@ -852,28 +949,28 @@
 
 <hr class="divider">
 
-<!-- PACKING LIST -->
+<!-- PACKING LIST (Interactive) -->
 <section class="section" id="packing">
   <div class="container">
     <div class="section-label">What to Carry</div>
-    <h2 class="section-title">Complete Packing Checklist</h2>
-    <p class="section-intro">Pack light but smart. You'll be carrying your bag on the trek — every kg matters. Aim for a bag under 10–12 kg.</p>
+    <h2 class="section-title">Interactive Packing Checklist</h2>
+    <p class="section-intro">Pack light but smart. You'll be carrying your bag on the trek — every kg matters. Click an item to cross it off.</p>
 
     <div class="grid-2">
       <div class="card">
         <div class="card-icon" style="background: var(--saffron-light);">🧥</div>
         <h3>Clothing & Gear</h3>
         <ul class="checklist">
-          <li><div class="check-box"></div><div><strong>Thermal inner wear (top + bottom)</strong><span>2 sets minimum — it's cold even in summer</span></div></li>
-          <li><div class="check-box"></div><div><strong>Warm fleece jacket or sweater</strong><span>Medium weight for layering</span></div></li>
-          <li><div class="check-box"></div><div><strong>Waterproof rain jacket / poncho</strong><span>Non-negotiable — rain hits without warning</span></div></li>
-          <li><div class="check-box"></div><div><strong>Trekking pants (2 pairs)</strong><span>Quick-dry fabric, not jeans — jeans are deadly when wet</span></div></li>
-          <li><div class="check-box"></div><div><strong>Good trekking boots / ankle support shoes</strong><span>Waterproof with grip soles</span></div></li>
-          <li><div class="check-box"></div><div><strong>Woollen socks (3–4 pairs)</strong><span>Merino wool preferred — prevents blisters</span></div></li>
-          <li><div class="check-box"></div><div><strong>Woollen cap / beanie</strong><span>Significant heat loss through head</span></div></li>
-          <li><div class="check-box"></div><div><strong>Gloves</strong><span>Lightweight but warm fleece gloves</span></div></li>
-          <li><div class="check-box"></div><div><strong>Sunglasses (UV protection)</strong><span>High-altitude UV is extremely intense</span></div></li>
-          <li><div class="check-box"></div><div><strong>Trekking poles / walking stick</strong><span>Rental available at Gaurikund too — ₹100–₹200</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Thermal inner wear (top + bottom)</strong><span>2 sets minimum — it's cold even in summer</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Warm fleece jacket or sweater</strong><span>Medium weight for layering</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Waterproof rain jacket / poncho</strong><span>Non-negotiable — rain hits without warning</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Trekking pants (2 pairs)</strong><span>Quick-dry fabric, not jeans — jeans are deadly when wet</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Good trekking boots / ankle support shoes</strong><span>Waterproof with grip soles</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Woollen socks (3–4 pairs)</strong><span>Merino wool preferred — prevents blisters</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Woollen cap / beanie</strong><span>Significant heat loss through head</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Gloves</strong><span>Lightweight but warm fleece gloves</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Sunglasses (UV protection)</strong><span>High-altitude UV is extremely intense</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Trekking poles / walking stick</strong><span>Rental available at Gaurikund too — ₹100–₹200</span></div></li>
         </ul>
       </div>
 
@@ -881,16 +978,16 @@
         <div class="card-icon" style="background: var(--sky-light);">🩹</div>
         <h3>Medical & Health</h3>
         <ul class="checklist">
-          <li><div class="check-box"></div><div><strong>Diamox (Acetazolamide)</strong><span>For altitude sickness prevention — consult doctor before use</span></div></li>
-          <li><div class="check-box"></div><div><strong>ORS Sachets (10–15 packets)</strong><span>Critical for hydration at altitude</span></div></li>
-          <li><div class="check-box"></div><div><strong>Ibuprofen / Paracetamol</strong><span>For headaches and body pain</span></div></li>
-          <li><div class="check-box"></div><div><strong>Antacids & anti-diarrheal tablets</strong><span>Food change can upset stomach</span></div></li>
-          <li><div class="check-box"></div><div><strong>Bandages, antiseptic, blister pads</strong><span>Basic first aid essentials</span></div></li>
-          <li><div class="check-box"></div><div><strong>Pulse oximeter</strong><span>Monitor oxygen levels — critical for AMS detection</span></div></li>
-          <li><div class="check-box"></div><div><strong>Sunscreen SPF 50+</strong><span>Reapply every 2 hours at altitude</span></div></li>
-          <li><div class="check-box"></div><div><strong>Lip balm</strong><span>Cold dry air causes cracking fast</span></div></li>
-          <li><div class="check-box"></div><div><strong>Personal prescription medicines</strong><span>Carry extra — no pharmacies above Gaurikund</span></div></li>
-          <li><div class="check-box"></div><div><strong>Glucose/energy supplements</strong><span>Glucon-D sachets, energy bars, dry fruits</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Diamox (Acetazolamide)</strong><span>For altitude sickness prevention — consult doctor before use</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>ORS Sachets (10–15 packets)</strong><span>Critical for hydration at altitude</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Ibuprofen / Paracetamol</strong><span>For headaches and body pain</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Antacids & anti-diarrheal tablets</strong><span>Food change can upset stomach</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Bandages, antiseptic, blister pads</strong><span>Basic first aid essentials</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Pulse oximeter</strong><span>Monitor oxygen levels — critical for AMS detection</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Sunscreen SPF 50+</strong><span>Reapply every 2 hours at altitude</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Lip balm</strong><span>Cold dry air causes cracking fast</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Personal prescription medicines</strong><span>Carry extra — no pharmacies above Gaurikund</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Glucose/energy supplements</strong><span>Glucon-D sachets, energy bars, dry fruits</span></div></li>
         </ul>
       </div>
 
@@ -898,13 +995,13 @@
         <div class="card-icon" style="background: var(--forest-light);">📋</div>
         <h3>Documents & Money</h3>
         <ul class="checklist">
-          <li><div class="check-box"></div><div><strong>Aadhaar Card (original + copies)</strong><span>Mandatory for registration at Sonprayag</span></div></li>
-          <li><div class="check-box"></div><div><strong>Passport / Voter ID (backup ID)</strong><span>Additional identification</span></div></li>
-          <li><div class="check-box"></div><div><strong>Train/flight tickets (printed + digital)</strong><span>Mobile signal unreliable in mountains</span></div></li>
-          <li><div class="check-box"></div><div><strong>Hotel booking confirmations</strong><span>Print copies — internet may not work</span></div></li>
-          <li><div class="check-box"></div><div><strong>Cash (₹10,000–₹15,000 per person)</strong><span>ATMs are limited and often out of cash. Last reliable ATM at Rudraprayag or Sonprayag</span></div></li>
-          <li><div class="check-box"></div><div><strong>Emergency contact list (physical copy)</strong><span>Save numbers offline too</span></div></li>
-          <li><div class="check-box"></div><div><strong>Travel insurance documents</strong><span>Highly recommended for trek + altitude risk</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Aadhaar Card (original + copies)</strong><span>Mandatory for registration at Sonprayag</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Passport / Voter ID (backup ID)</strong><span>Additional identification</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Train/flight tickets (printed + digital)</strong><span>Mobile signal unreliable in mountains</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Hotel booking confirmations</strong><span>Print copies — internet may not work</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Cash (₹10,000–₹15,000 per person)</strong><span>ATMs are limited and often out of cash. Last reliable ATM at Rudraprayag</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Emergency contact list (physical copy)</strong><span>Save numbers offline too</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Travel insurance documents</strong><span>Highly recommended for trek + altitude risk</span></div></li>
         </ul>
       </div>
 
@@ -912,13 +1009,13 @@
         <div class="card-icon" style="background: var(--gold-light);">⚙️</div>
         <h3>Essentials & Gadgets</h3>
         <ul class="checklist">
-          <li><div class="check-box"></div><div><strong>Daypack (20–25L)</strong><span>Lightweight for the trek, leave big bag at Gaurikund</span></div></li>
-          <li><div class="check-box"></div><div><strong>Power bank (20,000 mAh)</strong><span>Charging points rare or unreliable above Gaurikund</span></div></li>
-          <li><div class="check-box"></div><div><strong>Headlamp / torch with extra batteries</strong><span>Essential for 4 AM temple starts</span></div></li>
-          <li><div class="check-box"></div><div><strong>Reusable water bottle (1–2L)</strong><span>Plastic waste is a serious issue in Himalayas</span></div></li>
-          <li><div class="check-box"></div><div><strong>Waterproof bag cover / dry bags</strong><span>Protect electronics and documents from rain</span></div></li>
-          <li><div class="check-box"></div><div><strong>Offline maps downloaded (Google Maps)</strong><span>Download Uttarakhand region offline before leaving</span></div></li>
-          <li><div class="check-box"></div><div><strong>Plastic carry bags (5–10)</strong><span>Wrap electronics, keep rubbish — leave no trace</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Daypack (20–25L)</strong><span>Lightweight for the trek, leave big bag at Gaurikund</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Power bank (20,000 mAh)</strong><span>Charging points rare or unreliable above Gaurikund</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Headlamp / torch with extra batteries</strong><span>Essential for 4 AM temple starts</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Reusable water bottle (1–2L)</strong><span>Plastic waste is a serious issue in Himalayas</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Waterproof bag cover / dry bags</strong><span>Protect electronics and documents from rain</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Offline maps downloaded (Google Maps)</strong><span>Download Uttarakhand region offline before leaving</span></div></li>
+          <li onclick="this.classList.toggle('packed')"><div class="check-box"></div><div><strong>Plastic carry bags (5–10)</strong><span>Wrap electronics, keep rubbish — leave no trace</span></div></li>
         </ul>
       </div>
     </div>
@@ -1195,5 +1292,96 @@
   <p style="margin-top: 0.5rem; font-size: 0.8rem;">Information is for planning reference. Always verify current conditions, temple timings, and bookings closer to travel date. Mountain conditions can change rapidly — stay informed and travel responsibly.</p>
 </footer>
 
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+// 1. Progress Bar & Back to Top visibility
+window.addEventListener('scroll', () => {
+  const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = (winScroll / height) * 100;
+  document.getElementById("progress-bar").style.width = scrolled + "%";
+  
+  const backToTopBtn = document.getElementById("backToTop");
+  if (winScroll > 400) {
+    backToTopBtn.classList.add("visible");
+  } else {
+    backToTopBtn.classList.remove("visible");
+  }
+});
+
+// 2. Active Nav Highlighting
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? 'var(--dark)' : 'var(--stone)';
+    a.style.background = a.getAttribute('href') === '#' + current ? 'var(--snow)' : 'transparent';
+  });
+});
+
+// 3. LEAFLET MAP INITIALIZATION
+let map;
+document.addEventListener('DOMContentLoaded', function() {
+  const locations = {
+    surat: [21.1636, 72.8407],
+    rishikesh: [30.0869, 78.2676],
+    guptkashi: [30.5234, 79.0789],
+    sonprayag: [30.6346, 78.9942],
+    gaurikund: [30.6521, 79.0236],
+    kedarnath: [30.7352, 79.0669]
+  };
+
+  // Center map on Uttarakhand
+  map = L.map('interactive-map', { scrollWheelZoom: false }).setView([30.4, 78.6], 8);
+
+  // Topographic Layer
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri',
+    maxZoom: 19
+  }).addTo(map);
+
+  function createIcon(emoji) {
+    return L.divIcon({ className: 'custom-marker', html: `<div>${emoji}</div>`, iconSize: [36, 36], iconAnchor: [18, 18], popupAnchor: [0, -20] });
+  }
+
+  const stops = [
+    { loc: locations.surat, title: "Surat", desc: "Start Journey", icon: "🚆" },
+    { loc: locations.rishikesh, title: "Rishikesh", desc: "Gateway to Garhwal", icon: "🕉️" },
+    { loc: locations.guptkashi, title: "Guptkashi", desc: "Basecamp", icon: "⛺" },
+    { loc: locations.sonprayag, title: "Sonprayag", desc: "Road ends for private vehicles", icon: "🚙" },
+    { loc: locations.gaurikund, title: "Gaurikund", desc: "Trek starting point (16km)", icon: "🚶" },
+    { loc: locations.kedarnath, title: "Kedarnath", desc: "Shiva Temple (Alt: 11,755 ft)", icon: "🛕" }
+  ];
+
+  stops.forEach(stop => {
+    L.marker(stop.loc, { icon: createIcon(stop.icon) }).addTo(map)
+      .bindPopup(`<div class="popup-title">${stop.title}</div><div class="popup-desc">${stop.desc}</div>`);
+  });
+
+  // Train Line (Surat to Rishikesh)
+  L.polyline([locations.surat, locations.rishikesh], { color: '#1A6EA8', weight: 3, opacity: 0.6, dashArray: '10, 10' }).addTo(map);
+  
+  // Road Line (Rishikesh to Gaurikund)
+  L.polyline([locations.rishikesh, locations.guptkashi, locations.sonprayag, locations.gaurikund], { color: '#4A4540', weight: 3, opacity: 0.8 }).addTo(map);
+
+  // Trek Line (Gaurikund to Kedarnath)
+  L.polyline([locations.gaurikund, locations.kedarnath], { color: '#E8611A', weight: 4, opacity: 1, dashArray: '5, 5' }).addTo(map);
+
+  // Fit bounds
+  map.fitBounds(L.latLngBounds([locations.rishikesh, locations.kedarnath]), { padding: [50, 50] });
+});
+
+function flyToMap(lat, lng) {
+  document.getElementById('route').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => {
+    map.flyTo([lat, lng], 11, { duration: 1.5, easeLinearity: 0.25 });
+  }, 500); 
+}
+</script>
 </body>
 </html>
