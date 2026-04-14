@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kedarnath Tour Guide — From Surat</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #E8611A;
+    --saffron-light: #FFF0E6;
+    --saffron-mid: #F2944D;
+    --forest: #2D5A27;
+    --forest-light: #EEF5ED;
+    --forest-mid: #4A8A42;
+    --sky: #1A6EA8;
+    --sky-light: #E6F1FB;
+    --gold: #C8881A;
+    --gold-light: #FFF8E6;
+    --danger: #C0392B;
+    --danger-light: #FDECEA;
+    --snow: #F7F5F2;
+    --stone: #8B8580;
+    --dark: #1A1714;
+    --mid: #4A4540;
+    --light-border: #E8E3DC;
+    --card-bg: #FFFFFF;
+    --page-bg: #FAF8F5;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--sans); background: var(--page-bg); color: var(--dark); line-height: 1.7; font-size: 15px; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, #1A3A2A 0%, #2D5A40 40%, #3A6B35 70%, #5A4020 100%);
+    min-height: 90vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 600'%3E%3Cpolygon points='0,600 200,250 400,350 600,150 800,300 1000,100 1200,280 1440,180 1440,600' fill='rgba(255,255,255,0.03)'/%3E%3Cpolygon points='0,600 180,320 360,420 540,200 720,350 900,160 1100,310 1300,220 1440,280 1440,600' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") center/cover no-repeat;
+  }
+  .hero-badge {
+    display: inline-block; background: rgba(232,97,26,0.25); border: 1px solid rgba(232,97,26,0.5);
+    color: #FFB07A; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; font-weight: 500;
+    padding: 6px 20px; border-radius: 40px; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 700;
+    color: #FFFFFF; line-height: 1.1; margin-bottom: 0.5rem;
+  }
+  .hero h1 span { color: #FFB07A; }
+  .hero-sub { font-size: clamp(1rem, 2.5vw, 1.3rem); color: rgba(255,255,255,0.75); margin: 1rem 0 2rem; font-weight: 300; }
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num { font-family: var(--serif); font-size: 2rem; color: #FFB07A; font-weight: 600; }
+  .hero-stat .lbl { font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 2px; }
+  .hero-divider { width: 60px; height: 2px; background: rgba(232,97,26,0.5); margin: 1.5rem auto; }
+
+  /* LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+  .section { padding: 4rem 0; }
+  .section-label {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--saffron);
+    font-weight: 600; margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--dark);
+    font-weight: 600; margin-bottom: 1rem; line-height: 1.2;
+  }
+  .section-intro { color: var(--mid); font-size: 1rem; max-width: 600px; margin-bottom: 2.5rem; }
+  .divider { border: none; border-top: 1px solid var(--light-border); margin: 0; }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg); border: 1px solid var(--light-border); border-radius: 16px;
+    padding: 1.5rem; transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
+  .card-icon {
+    width: 44px; height: 44px; border-radius: 12px; display: flex;
+    align-items: center; justify-content: center; font-size: 20px; margin-bottom: 1rem;
+  }
+  .card h3 { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--dark); }
+  .card p { color: var(--mid); font-size: 0.9rem; line-height: 1.7; }
+
+  /* GRID LAYOUTS */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  @media (max-width: 900px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .grid-3, .grid-2, .grid-4 { grid-template-columns: 1fr; } .hero-stats { gap: 1.5rem; } }
+
+  /* ROUTE */
+  .route-step {
+    display: flex; gap: 1.25rem; padding: 1.25rem 0; border-bottom: 1px solid var(--light-border);
+  }
+  .route-step:last-child { border-bottom: none; }
+  .route-num {
+    width: 36px; height: 36px; min-width: 36px; background: var(--saffron-light);
+    border: 1.5px solid var(--saffron); border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-weight: 600; color: var(--saffron); font-size: 13px;
+  }
+  .route-content h4 { font-weight: 600; font-size: 0.95rem; color: var(--dark); margin-bottom: 3px; }
+  .route-content p { color: var(--mid); font-size: 0.875rem; }
+  .route-tag {
+    display: inline-block; font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 500; margin-top: 5px;
+  }
+  .tag-train { background: var(--sky-light); color: var(--sky); }
+  .tag-bus { background: var(--forest-light); color: var(--forest); }
+  .tag-taxi { background: var(--gold-light); color: var(--gold); }
+  .tag-trek { background: var(--saffron-light); color: var(--saffron); }
+  .tag-heli { background: #F0E6FF; color: #6A35B8; }
+  .tag-stay { background: #E6F9FF; color: #1A7A8A; }
+
+  /* ITINERARY */
+  .day-card {
+    background: var(--card-bg); border: 1px solid var(--light-border); border-radius: 16px;
+    overflow: hidden; margin-bottom: 1.25rem;
+  }
+  .day-header {
+    display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem;
+    background: var(--forest-light); border-bottom: 1px solid var(--light-border);
+  }
+  .day-num {
+    font-family: var(--serif); font-size: 2rem; color: var(--forest); font-weight: 700; line-height: 1;
+  }
+  .day-title { font-weight: 600; font-size: 1rem; color: var(--forest); }
+  .day-subtitle { font-size: 0.8rem; color: var(--forest-mid); }
+  .day-body { padding: 1.25rem 1.5rem; }
+  .activity-list { list-style: none; }
+  .activity-list li {
+    padding: 8px 0; border-bottom: 1px solid var(--light-border); font-size: 0.9rem; color: var(--mid);
+    padding-left: 1.5rem; position: relative;
+  }
+  .activity-list li:last-child { border-bottom: none; }
+  .activity-list li::before {
+    content: '→'; position: absolute; left: 0; color: var(--saffron); font-weight: 600;
+  }
+  .activity-list li strong { color: var(--dark); }
+
+  /* ALERT BOX */
+  .alert {
+    border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; display: flex; gap: 1rem;
+  }
+  .alert-danger { background: var(--danger-light); border: 1px solid #F5C6C2; }
+  .alert-warning { background: var(--gold-light); border: 1px solid #F0D4A0; }
+  .alert-success { background: var(--forest-light); border: 1px solid #C0DAB8; }
+  .alert-info { background: var(--sky-light); border: 1px solid #B5D4F4; }
+  .alert-icon { font-size: 1.25rem; min-width: 28px; margin-top: 2px; }
+  .alert h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+  .alert-danger h4 { color: var(--danger); }
+  .alert-warning h4 { color: var(--gold); }
+  .alert-success h4 { color: var(--forest); }
+  .alert-info h4 { color: var(--sky); }
+  .alert p, .alert ul { font-size: 0.875rem; color: var(--mid); }
+  .alert ul { padding-left: 1rem; }
+  .alert ul li { margin: 3px 0; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 9px 0; border-bottom: 1px dashed var(--light-border); font-size: 0.9rem;
+    color: var(--mid); display: flex; align-items: flex-start; gap: 0.75rem;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box {
+    width: 18px; height: 18px; min-width: 18px; border: 1.5px solid var(--light-border);
+    border-radius: 4px; margin-top: 2px; background: white;
+  }
+  .checklist li strong { color: var(--dark); display: block; font-size: 0.85rem; }
+  .checklist li span { color: var(--stone); font-size: 0.82rem; }
+
+  /* BUDGET TABLE */
+  .budget-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .budget-table th {
+    text-align: left; padding: 10px 14px; background: var(--forest-light);
+    color: var(--forest); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .budget-table td { padding: 10px 14px; border-bottom: 1px solid var(--light-border); color: var(--mid); }
+  .budget-table tr:last-child td { border-bottom: none; font-weight: 600; color: var(--dark); background: var(--snow); }
+  .budget-table .cost { text-align: right; font-weight: 500; color: var(--dark); }
+
+  /* WEATHER TABLE */
+  .weather-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
+  @media (max-width: 700px) { .weather-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 450px) { .weather-grid { grid-template-columns: repeat(2, 1fr); } }
+  .weather-card {
+    background: var(--card-bg); border: 1px solid var(--light-border); border-radius: 12px;
+    padding: 1rem; text-align: center;
+  }
+  .weather-card .month { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--stone); margin-bottom: 6px; }
+  .weather-card .temp { font-size: 1.4rem; font-weight: 600; font-family: var(--serif); color: var(--dark); }
+  .weather-card .desc { font-size: 0.75rem; color: var(--mid); margin-top: 4px; line-height: 1.4; }
+  .weather-card.best { border-color: var(--forest-mid); background: var(--forest-light); }
+  .weather-card.best .temp { color: var(--forest); }
+  .weather-card.closed { border-color: #ddd; background: #F5F5F5; opacity: 0.7; }
+
+  /* PILL BADGES */
+  .pill {
+    display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .pill-best { background: var(--forest-light); color: var(--forest); }
+  .pill-closed { background: #F0F0F0; color: #888; }
+  .pill-okay { background: var(--gold-light); color: var(--gold); }
+
+  /* TEMPLE INFO BANNER */
+  .temple-banner {
+    background: linear-gradient(135deg, #2D1F00, #5A3A10);
+    border-radius: 20px; padding: 2.5rem; color: white; position: relative; overflow: hidden; margin-bottom: 2rem;
+  }
+  .temple-banner::after {
+    content: '🕉';
+    position: absolute; right: 2rem; top: 50%; transform: translateY(-50%);
+    font-size: 5rem; opacity: 0.1;
+  }
+  .temple-banner h3 { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 0.75rem; color: #FFD590; }
+  .temple-banner p { color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.8; max-width: 700px; }
+
+  /* NAV */
+  .nav {
+    position: sticky; top: 0; z-index: 100; background: rgba(250,248,245,0.95);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--light-border); padding: 0.75rem 0;
+  }
+  .nav-inner { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-link {
+    white-space: nowrap; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--stone);
+    text-decoration: none; border-radius: 8px; transition: all 0.15s;
+  }
+  .nav-link:hover { color: var(--dark); background: var(--snow); }
+
+  /* TIPS BOX */
+  .tip-box {
+    background: var(--card-bg); border: 1px solid var(--light-border); border-radius: 12px;
+    padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: flex-start;
+  }
+  .tip-icon { font-size: 16px; min-width: 24px; }
+  .tip-text { font-size: 0.875rem; color: var(--mid); }
+  .tip-text strong { color: var(--dark); display: block; margin-bottom: 2px; font-size: 0.9rem; }
+
+  /* HORIZONTAL RULE SECTION BREAK */
+  .section-break { display: flex; align-items: center; gap: 1rem; margin: 0.5rem 0 2rem; }
+  .section-break .line { flex: 1; border-top: 1px solid var(--light-border); }
+  .section-break .icon { color: var(--saffron); font-size: 18px; }
+
+  /* EMERGENCY BOX */
+  .emergency-box {
+    background: #FFF0EE; border: 2px solid #F5C6C2; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.25rem;
+  }
+  .emergency-box h4 { color: var(--danger); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+  .contact-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #F5C6C2; font-size: 0.875rem; }
+  .contact-row:last-child { border-bottom: none; }
+  .contact-row span:first-child { color: var(--mid); }
+  .contact-row span:last-child { font-weight: 600; color: var(--danger); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.6); text-align: center;
+    padding: 2.5rem 1.5rem; font-size: 0.85rem;
+  }
+  footer strong { color: #FFB07A; }
+
+  /* SCROLL OFFSET FOR STICKY NAV */
+  [id] { scroll-margin-top: 70px; }
+
+  .highlight-box {
+    background: var(--saffron-light); border: 1px solid #F2C4A0; border-radius: 12px;
+    padding: 1.25rem 1.5rem; margin-top: 1rem;
+  }
+  .highlight-box h4 { color: var(--saffron); font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .highlight-box p { color: var(--mid); font-size: 0.875rem; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  @media (max-width: 650px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* BADGE inline */
+  .inline-badge {
+    display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; vertical-align: middle; margin-left: 4px;
+  }
+  .badge-rec { background: var(--forest-light); color: var(--forest); }
+  .badge-warn { background: var(--gold-light); color: var(--gold); }
+  .badge-alt { background: var(--sky-light); color: var(--sky); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Complete Tour Guide 2025</div>
+  <h1>Kedarnath<br><span>Yatra</span></h1>
+  <div class="hero-divider"></div>
+  <p class="hero-sub">Your sacred journey from Surat to the Himalayas — fully planned</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">8–10</div><div class="lbl">Days Trip</div></div>
+    <div class="hero-stat"><div class="num">1,400+</div><div class="lbl">km from Surat</div></div>
+    <div class="hero-stat"><div class="num">3,583m</div><div class="lbl">Altitude</div></div>
+    <div class="hero-stat"><div class="num">16 km</div><div class="lbl">Trek Distance</div></div>
+  </div>
+</div>
+
+<!-- STICKY NAV -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a class="nav-link" href="#overview">Overview</a>
+      <a class="nav-link" href="#route">Route from Surat</a>
+      <a class="nav-link" href="#itinerary">Day Itinerary</a>
+      <a class="nav-link" href="#temple">Temple Info</a>
+      <a class="nav-link" href="#trek">Trek Guide</a>
+      <a class="nav-link" href="#weather">Weather</a>
+      <a class="nav-link" href="#accommodation">Stay</a>
+      <a class="nav-link" href="#packing">Packing</a>
+      <a class="nav-link" href="#safety">Safety</a>
+      <a class="nav-link" href="#budget">Budget</a>
+      <a class="nav-link" href="#tips">Pro Tips</a>
+      <a class="nav-link" href="#emergency">Emergency</a>
+    </div>
+  </div>
+</nav>
+
+<!-- OVERVIEW -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-label">About the Journey</div>
+    <h2 class="section-title">Why Kedarnath?</h2>
+    <p class="section-intro">Kedarnath is one of India's most revered pilgrimage sites — home to one of the 12 Jyotirlingas of Lord Shiva, sitting at 3,583 metres in the Garhwal Himalayas. It's a journey of devotion, adventure, and breathtaking natural beauty.</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon" style="background: var(--saffron-light);">🛕</div>
+        <h3>Spiritual Significance</h3>
+        <p>One of the Char Dham pilgrimage sites and among the 12 Jyotirlingas. The temple is believed to be over 1,200 years old, built by Adi Shankaracharya.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--forest-light);">🏔️</div>
+        <h3>Natural Beauty</h3>
+        <p>Stunning Himalayan panoramas, the Mandakini River, Chorabari Lake (Gandhi Sarovar), and the majestic Kedarnath peak at 6,940m backdrop.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--sky-light);">🧭</div>
+        <h3>Adventure & Trek</h3>
+        <p>A 16-km trek through alpine meadows, waterfalls, and rugged terrain. Options for pony rides, palanquins, and helicopter service available.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 1.5rem;" class="alert alert-warning">
+      <div class="alert-icon">📅</div>
+      <div>
+        <h4>Temple Open Season 2025</h4>
+        <p>Kedarnath temple opens on <strong>Akshaya Tritiya</strong> (around late April / early May) and closes on <strong>Bhai Dooj</strong> after Diwali (around October/November). The exact 2025 dates are announced by the temple committee. Plan your trip accordingly — outside this window the temple is inaccessible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ROUTE FROM SURAT -->
+<section class="section" id="route">
+  <div class="container">
+    <div class="section-label">Getting There</div>
+    <h2 class="section-title">Route from Surat to Kedarnath</h2>
+    <p class="section-intro">Surat doesn't have direct connectivity to the Kedarnath base camp. You'll need to combine train + road travel (or fly to Dehradun). Here are your best options.</p>
+
+    <div class="two-col" style="margin-bottom: 2rem;">
+      <div class="card" style="border: 2px solid var(--forest-mid);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <h3>Option A — Train + Road</h3>
+          <span class="pill pill-best">Recommended</span>
+        </div>
+        <p style="margin-top: 0.5rem;">Most economical and practical for groups. Surat → Haridwar/Rishikesh by train, then road to Gaurikund.</p>
+        <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--stone);">
+          <strong style="color: var(--dark);">Total journey:</strong> ~24–30 hrs<br>
+          <strong style="color: var(--dark);">Cost estimate:</strong> ₹800–₹2,500/person (train)
+        </div>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <h3>Option B — Flight + Road</h3>
+          <span class="pill pill-okay">Faster</span>
+        </div>
+        <p style="margin-top: 0.5rem;">Surat/Ahmedabad → Dehradun (Jolly Grant Airport), then road to Gaurikund. Saves time but costs more.</p>
+        <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--stone);">
+          <strong style="color: var(--dark);">Total journey:</strong> ~10–14 hrs<br>
+          <strong style="color: var(--dark);">Cost estimate:</strong> ₹4,000–₹10,000+/person
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP BY STEP ROUTE -->
+    <div class="card" style="padding: 1.5rem 2rem;">
+      <h3 style="margin-bottom: 1.25rem; font-family: var(--serif);">Step-by-Step Route (Train Option)</h3>
+      <div class="route-step">
+        <div class="route-num">1</div>
+        <div class="route-content">
+          <h4>Surat → Haridwar / Rishikesh</h4>
+          <p>Take a direct train from Surat Railway Station. Key trains: <strong>Dehradun Express (19019)</strong> or <strong>Haridwar Express</strong>. Journey ~22–26 hrs. Book at least 45–60 days in advance during season.</p>
+          <span class="route-tag tag-train">Train · 22–26 hrs</span>
+        </div>
+      </div>
+      <div class="route-step">
+        <div class="route-num">2</div>
+        <div class="route-content">
+          <h4>Haridwar / Rishikesh → Rudraprayag</h4>
+          <p>Board a shared taxi or private cab (NH7/NH58 route). Stop to see Devprayag confluence if time permits. Overnight stay recommended at Rudraprayag to acclimatize.</p>
+          <span class="route-tag tag-taxi">Taxi/Bus · 5–6 hrs · ~160 km</span>
+        </div>
+      </div>
+      <div class="route-step">
+        <div class="route-num">3</div>
+        <div class="route-content">
+          <h4>Rudraprayag → Sonprayag</h4>
+          <p>Continue by road through Tilwara, Augustmuni, Ukhimath. Scenic but winding mountain roads. Sonprayag is the last private vehicle checkpoint.</p>
+          <span class="route-tag tag-bus">Shared Taxi/Bus · 2–3 hrs · ~75 km</span>
+        </div>
+      </div>
+      <div class="route-step">
+        <div class="route-num">4</div>
+        <div class="route-content">
+          <h4>Sonprayag → Gaurikund</h4>
+          <p>Shuttle service runs between Sonprayag and Gaurikund (7 km). Private vehicles are NOT allowed beyond Sonprayag. Government shuttle or shared jeep only.</p>
+          <span class="route-tag tag-bus">Shuttle · 20–30 min · 7 km</span>
+          <span class="route-tag tag-stay" style="margin-left: 6px;">Stay here overnight</span>
+        </div>
+      </div>
+      <div class="route-step">
+        <div class="route-num">5</div>
+        <div class="route-content">
+          <h4>Gaurikund → Kedarnath Temple</h4>
+          <p>The main trek starts here. Trek is 16–18 km one way with ~1,300m elevation gain. Alternatively, take a helicopter from Phata/Sirsi/Guptkashi helipads to Kedarnath.</p>
+          <span class="route-tag tag-trek">Trek · 16 km · 6–8 hrs</span>
+          <span class="route-tag tag-heli" style="margin-left: 6px;">Helicopter option available</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top: 1.5rem;">
+      <div class="alert-icon">✈️</div>
+      <div>
+        <h4>Flight Route (Faster Option)</h4>
+        <p>Surat Airport → Dehradun Jolly Grant Airport (direct or via Mumbai/Delhi). Then taxi from Dehradun to Sonprayag (~230 km, 7–9 hrs). Book taxis in advance — demand is high during season.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 8-DAY ITINERARY -->
+<section class="section" id="itinerary">
+  <div class="container">
+    <div class="section-label">Day by Day Plan</div>
+    <h2 class="section-title">8-Day Complete Itinerary</h2>
+    <p class="section-intro">Carefully planned to allow acclimatization, cover key sights, and complete the Kedarnath darshan comfortably as a group from Surat.</p>
+
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-num">01</div>
+        <div><div class="day-title">Surat → Board Train to Haridwar</div><div class="day-subtitle">Departure Day</div></div>
+      </div>
+      <div class="day-body">
+        <ul class="activity-list">
+          <li><strong>Evening:</strong> Assemble at Surat Railway Station. Board overnight train to Haridwar (Dehradun Express or similar)</li>
+          <li><strong>On train:</strong> Pack light snacks, water, entertainment. Train journey is ~22–24 hours</li>
+          <li><strong>Tip:</strong> Book 2-tier AC (2AC) or 3-tier AC (3AC) for group comfort. Reserve window seats for mountain views closer to Haridwar</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-num">02</div>
+        <div><div class="day-title">Arrive Haridwar → Visit Rishikesh</div><div class="day-subtitle">Haridwar/Rishikesh · Acclimatize</div></div>
+      </div>
+      <div class="day-body">
+        <ul class="activity-list">
+          <li><strong>Morning arrival:</strong> Reach Haridwar. Check in to hotel near Har Ki Pauri</li>
+          <li><strong>Afternoon:</strong> Attend Ganga Aarti at Har Ki Pauri (evening aarti is magical — don't miss it!)</li>
+          <li><strong>Explore:</strong> Mansa Devi Temple (ropeway or trek), Chandi Devi Temple</li>
+          <li><strong>Day trip to Rishikesh:</strong> Laxman Jhula, Ram Jhula, Triveni Ghat, Beatles Ashram</li>
+          <li><strong>Stay:</strong> Haridwar or Rishikesh. Good food options, last chance for Gujarati thali!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-num">03</div>
+        <div><div class="day-title">Rishikesh → Rudraprayag</div><div class="day-subtitle">~145 km · Mountain Entry</div></div>
+      </div>
+      <div class="day-body">
+        <ul class="activity-list">
+          <li><strong>Early morning:</strong> Depart Rishikesh by 6–7 AM. Roads get congested after 9 AM</li>
+          <li><strong>En route stop:</strong> Devprayag — confluence of Alaknanda & Bhagirathi forming the Ganga. Stunning viewpoint</li>
+          <li><strong>Arrive Rudraprayag:</strong> Visit Rudraprayag confluence (Mandakini + Alaknanda). Explore the small town</li>
+          <li><strong>Evening:</strong> Rudra temple visit. Good local dhabas serving hot meals</li>
+          <li><strong>Stay:</strong> Rudraprayag — important for altitude adjustment (895m elevation)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-num">04</div>
+        <div><div class="day-title">Rudraprayag → Gaurikund</div><div class="day-subtitle">~75 km · Base Camp Arrival</div></div>
+      </div>
+      <div class="day-body">
+        <ul class="activity-list">
+          <li><strong>Morning:</strong> Depart by 7 AM. Pass through Augustmuni, Ukhimath (Kedarnath's winter abode), Kund, Sitapur</li>
+          <li><strong>Stop at Guptkashi:</strong> Ardhnareshwar Temple and Vishwanath Temple. Good lunch options here</li>
+          <li><strong>Sonprayag:</strong> Register for the trek (biometric registration mandatory with Aadhaar). Pay entry fee (₹50/person). Park vehicles here</li>
+          <li><strong>Shuttle to Gaurikund:</strong> 7 km by government shuttle (₹40/person). Gauri Kund — hot water spring, Gauri temple</li>
+          <li><strong>Evening prep:</strong> Arrange ponies/palki if needed. Buy trekking gear/raincoat if not packed. Early rest — trek day tomorrow!</li>
+          <li><strong>Stay:</strong> Gaurikund (guesthouses or pre-booked GMVN accommodation)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-card" style="border-color: var(--saffron); border-width: 2px;">
+      <div class="day-header" style="background: linear-gradient(135deg, #FFF0E6, #FFF8F2);">
+        <div class="day-num" style="color: var(--saffron);">05</div>
+        <div>
+          <div class="day-title" style="color: var(--saffron);">TREK DAY — Gaurikund to Kedarnath</div>
+          <div class="day-subtitle" style="color: var(--saffron-mid);">16 km trek · 3,583m elevation · The Highlight!</div>
+        </div>
+      </div>
+      <div class="day-body">
+        <ul class="activity-list">
+          <li><strong>4:00 AM Wake up:</strong> Early start is essential. Crowd increases significantly after 7 AM</li>
+          <li><strong>5:00 AM Start trek:</strong> From Gaurikund (1,982m). Key waypoints — Jungle Chatti (4 km), Bheembali (6 km), Lincholi (9 km), Kedarnath Base (13 km), Temple (16 km)</li>
+          <li><strong>Pony/Palki option:</strong> ₹2,500–₹4,500 one way. Book at Gaurikund official counters only</li>
+          <li><strong>Helicopter option:</strong> From Phata (nearest) or Sirsi helipads — ₹3,500–₹5,000/person one way. Book weeks in advance online at <em>irctc.co.in</em></li>
+          <li><strong>Reach Kedarnath:</strong> By 12–1 PM ideally. Check in to pre-booked camp/lodge</li>
+          <li><strong>Evening:</strong> Attend the magnificent Kedarnath Aarti (7:30–8:30 PM). This is unmissable — the energy is divine</li>
+          <li><strong>Stay overnight:</strong> At Kedarnath — GMVN, private tents, or guesthouses</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-card" style="border-color: var(--gold); border-width: 2px;">
+      <div class="day-header" style="background: var(--gold-light);">
+        <div class="day-num" style="color: var(--gold);">06</div>
+        <div>
+          <div class="day-title" style="color: var(--gold);">Kedarnath Darshan + Nearby Sights</div>
+          <div class="day-subtitle" style="color: #B8901A;">Main Devotion Day</div>
+        </div>
+      </div>
+      <div class="day-body">
+        <ul class="activity-list">
+          <li><strong>4:00 AM — 5:00 AM:</strong> <strong>Abhishek Puja</strong> — special early morning ritual at the temple. Book in advance for VIP darshan</li>
+          <li><strong>Morning Darshan:</strong> Queue management is strict. Token system usually in place — collect tokens the previous evening</li>
+          <li><strong>10 AM onwards:</strong> Trek to <strong>Bhairavnath Temple</strong> (1.5 km uphill from main temple). Outstanding 360° Himalayan views</li>
+          <li><strong>Afternoon:</strong> Visit <strong>Gandhi Sarovar (Chorabari Lake)</strong> — 3 km from temple. Sacred lake where Gandhi's ashes were immersed</li>
+          <li><strong>Evening:</strong> Second darshan, sit by the Mandakini river, soak in the spiritual atmosphere</li>
+          <li><strong>Aarti again:</strong> Second time attending the evening aarti — each time is unique and emotional</li>
+          <li><strong>Night:</strong> Rest. Temperatures drop to near freezing — extra blankets needed</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-num">07</div>
+        <div><div class="day-title">Kedarnath → Descent → Guptkashi</div><div class="day-subtitle">Return Journey Begins</div></div>
+      </div>
+      <div class="day-body">
+        <ul class="activity-list">
+          <li><strong>5:00 AM:</strong> Final morning darshan and prasad</li>
+          <li><strong>7:00 AM:</strong> Begin descent to Gaurikund. Descent is faster but harder on knees — use trekking poles</li>
+          <li><strong>Arrive Gaurikund by 1–2 PM.</strong> Take shuttle to Sonprayag, then taxi to Guptkashi</li>
+          <li><strong>Guptkashi:</strong> Rest, hot meal, hot shower — heaven after the trek! Visit Ardhnareshwar temple</li>
+          <li><strong>Stay:</strong> Guptkashi — good hotel options, comfortable beds!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-num">08</div>
+        <div><div class="day-title">Guptkashi → Haridwar → Train to Surat</div><div class="day-subtitle">Homeward Bound</div></div>
+      </div>
+      <div class="day-body">
+        <ul class="activity-list">
+          <li><strong>Morning:</strong> Drive from Guptkashi to Haridwar (~190 km, 6–7 hrs)</li>
+          <li><strong>Haridwar:</strong> Last Ganga Aarti at Har Ki Pauri. Shopping — rudraksha, Uttarakhand herbs, trinkets</li>
+          <li><strong>Evening/Night:</strong> Board return train to Surat. Arrive Surat on Day 9</li>
+          <li><strong>Optional extension:</strong> Add Badrinath (Day 8–9) if time permits — only 100 km from Rudraprayag</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TEMPLE INFO -->
+<section class="section" id="temple">
+  <div class="container">
+    <div class="section-label">Sacred Knowledge</div>
+    <h2 class="section-title">Kedarnath Temple Information</h2>
+
+    <div class="temple-banner">
+      <h3>श्री केदारनाथ ज्योतिर्लिंग</h3>
+      <p>The Kedarnath temple is dedicated to Lord Shiva and is believed to be over 1,200 years old. Built in North Indian Himalayan style with large stone slabs, it stands at the base of the Kedarnath peak (6,940m). The temple is revered as one of the 12 Jyotirlingas and one of the Panch Kedar. The lingam inside is a natural rock formation in a conical shape.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon" style="background: var(--gold-light);">🕐</div>
+        <h3>Temple Timings</h3>
+        <p><strong>Morning Aarti:</strong> 4:00 AM – 7:00 AM<br>
+        <strong>Darshan Open:</strong> 7:00 AM – 3:00 PM<br>
+        <strong>Afternoon break:</strong> 3:00 PM – 5:00 PM<br>
+        <strong>Evening Darshan:</strong> 5:00 PM – 7:00 PM<br>
+        <strong>Sandhya Aarti:</strong> 7:30 PM – 8:30 PM</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--saffron-light);">🙏</div>
+        <h3>Puja Options</h3>
+        <p><strong>Abhishek:</strong> ₹1,500–₹5,000 (early morning, book in advance)<br>
+        <strong>Rudrabhishek:</strong> ₹3,000+ (special ritual)<br>
+        <strong>VIP Darshan Pass:</strong> Available for priority queue<br>
+        All bookings at official counters or via <em>badrinath-kedarnath.com</em></p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--forest-light);">📋</div>
+        <h3>Rules & Etiquette</h3>
+        <p>• Mobile phones NOT allowed inside the garbhagriha<br>
+        • Remove footwear before entering<br>
+        • Dress modestly — avoid shorts/sleeveless<br>
+        • Photography restricted near the lingam<br>
+        • Carry your own prasad or buy at temple shop</p>
+      </div>
+    </div>
+
+    <div class="alert alert-warning" style="margin-top: 1.5rem;">
+      <div class="alert-icon">📝</div>
+      <div>
+        <h4>Mandatory Registration</h4>
+        <p>All pilgrims must complete biometric registration at Sonprayag registration centre (Aadhaar card mandatory). Registration is free but must be done before proceeding. Online pre-registration is also available at <strong>devasthanam.uk.gov.in</strong> — highly recommended to avoid queues.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TREK GUIDE -->
+<section class="section" id="trek">
+  <div class="container">
+    <div class="section-label">On the Trail</div>
+    <h2 class="section-title">Kedarnath Trek Guide</h2>
+    <p class="section-intro">The 16-km trek from Gaurikund to Kedarnath is the highlight of the journey. Well-maintained with medical posts, food stalls, and rest points.</p>
+
+    <div class="grid-2" style="margin-bottom: 2rem;">
+      <div class="card">
+        <h3>📍 Trek Route Breakdown</h3>
+        <div style="margin-top: 1rem;">
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--light-border); font-size: 0.875rem;">
+            <span style="color: var(--mid);">Gaurikund</span><span style="font-weight: 600;">0 km · 1,982m</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--light-border); font-size: 0.875rem;">
+            <span style="color: var(--mid);">Jungle Chatti</span><span style="font-weight: 600;">4 km · 2,200m</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--light-border); font-size: 0.875rem;">
+            <span style="color: var(--mid);">Bheembali</span><span style="font-weight: 600;">7 km · 2,600m</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--light-border); font-size: 0.875rem;">
+            <span style="color: var(--mid);">Lincholi</span><span style="font-weight: 600;">9 km · 2,900m</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--light-border); font-size: 0.875rem;">
+            <span style="color: var(--mid);">Kedarnath Base</span><span style="font-weight: 600;">13 km · 3,400m</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.875rem; font-weight: 600; color: var(--saffron);">
+            <span>Kedarnath Temple</span><span>16 km · 3,583m</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>🚁 Helicopter Information</h3>
+        <p style="font-size: 0.875rem; color: var(--mid); margin: 0.75rem 0;">If trekking is not feasible, helicopter service is available from multiple helipads.</p>
+        <div style="font-size: 0.875rem; color: var(--mid);">
+          <div style="padding: 7px 0; border-bottom: 1px solid var(--light-border);"><strong style="color: var(--dark);">Phata Helipad</strong> — Nearest, ~30 km from Sonprayag</div>
+          <div style="padding: 7px 0; border-bottom: 1px solid var(--light-border);"><strong style="color: var(--dark);">Sirsi Helipad</strong> — Budget option, slightly farther</div>
+          <div style="padding: 7px 0; border-bottom: 1px solid var(--light-border);"><strong style="color: var(--dark);">Guptkashi Helipad</strong> — Well-connected</div>
+          <div style="padding: 7px 0;"><strong style="color: var(--dark);">Cost:</strong> ₹3,500–₹6,500 per person one way</div>
+        </div>
+        <div class="highlight-box" style="margin-top: 1rem;">
+          <h4>Book helicopters in advance!</h4>
+          <p>During peak season (May–June), helicopter slots sell out weeks ahead. Book on <strong>irctc.co.in</strong> or official operator websites. Cancellations due to weather are common — no refund if weather grounded.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="alert alert-success" style="margin: 0;">
+        <div>
+          <h4>Pony & Palki</h4>
+          <ul>
+            <li>Ponies: ₹2,500–₹4,000 one way</li>
+            <li>Palki (palanquin): ₹8,000–₹12,000 one way</li>
+            <li>Book at Gaurikund official counters early morning</li>
+            <li>Good for elderly or less fit pilgrims</li>
+            <li>Ponies not allowed in heavy rain/snow</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin: 0;">
+        <div>
+          <h4>Trek Difficulty</h4>
+          <ul>
+            <li>Moderate to Difficult for non-trekkers</li>
+            <li>Total ascent: ~1,600m gain over 16 km</li>
+            <li>Steep sections in first 5 km and last 4 km</li>
+            <li>Path is well-paved in most sections</li>
+            <li>Carry trekking poles — knees will thank you!</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-warning" style="margin: 0;">
+        <div>
+          <h4>Food & Water on Trek</h4>
+          <ul>
+            <li>Dhabas available every 2–3 km</li>
+            <li>Basic meals: maggi, rice, dal, tea ₹60–₹150</li>
+            <li>Bottled water: ₹30–₹60</li>
+            <li>Carry 2L water in reusable bottle</li>
+            <li>Avoid roadside cut fruits — stomach risk</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- WEATHER -->
+<section class="section" id="weather">
+  <div class="container">
+    <div class="section-label">Climate & Best Time</div>
+    <h2 class="section-title">Weather at Kedarnath</h2>
+    <p class="section-intro">Weather is highly unpredictable in the Himalayas. Plan for all conditions regardless of season.</p>
+
+    <div class="weather-grid" style="margin-bottom: 2rem;">
+      <div class="weather-card closed">
+        <div class="month">Jan–Mar</div>
+        <div class="temp">-5 to 5°C</div>
+        <div class="desc">Temple closed · Heavy snow · Inaccessible</div>
+        <div style="margin-top: 8px;"><span class="pill pill-closed">Closed</span></div>
+      </div>
+      <div class="weather-card best">
+        <div class="month">May–Jun</div>
+        <div class="temp">5 to 18°C</div>
+        <div class="desc">Opening season · Clear skies · Best trek</div>
+        <div style="margin-top: 8px;"><span class="pill pill-best">Best</span></div>
+      </div>
+      <div class="weather-card">
+        <div class="month">Jul–Aug</div>
+        <div class="temp">8 to 15°C</div>
+        <div class="desc">Monsoon · Rain · Landslide risk · Leeches</div>
+        <div style="margin-top: 8px;"><span class="pill pill-okay">Caution</span></div>
+      </div>
+      <div class="weather-card best">
+        <div class="month">Sep–Oct</div>
+        <div class="temp">3 to 15°C</div>
+        <div class="desc">Post-monsoon · Clear · Less crowded · Ideal</div>
+        <div style="margin-top: 8px;"><span class="pill pill-best">Best</span></div>
+      </div>
+      <div class="weather-card closed">
+        <div class="month">Nov–Dec</div>
+        <div class="temp">-10 to 5°C</div>
+        <div class="desc">Temple closes · First snowfall · Dangerous</div>
+        <div style="margin-top: 8px;"><span class="pill pill-closed">Closes</span></div>
+      </div>
+    </div>
+
+    <div class="alert alert-danger">
+      <div class="alert-icon">⚡</div>
+      <div>
+        <h4>Weather Warnings</h4>
+        <p>Himalayan weather changes within minutes. Even in May–June, sudden snowstorms, hailstorms, or thunderstorms can occur. Always carry a waterproof raincoat. Check weather daily on IMD (India Meteorological Department) website. Never dismiss dark clouds forming over peaks — they signal incoming storms.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 1rem; background: var(--sky-light); border-color: #B5D4F4;">
+      <h4 style="color: var(--sky);">Our Recommendation for Surat Group</h4>
+      <p><strong>Best windows: May 15 – June 15</strong> (opening season, maximum clarity) or <strong>September 15 – October 15</strong> (post-monsoon, fewer crowds, brilliant views). Avoid July–August monsoon if possible.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ACCOMMODATION -->
+<section class="section" id="accommodation">
+  <div class="container">
+    <div class="section-label">Where to Sleep</div>
+    <h2 class="section-title">Accommodation Along the Route</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>🏨 Haridwar / Rishikesh</h3>
+        <p style="margin: 0.5rem 0; font-size: 0.875rem; color: var(--mid);">Best options in this range:</p>
+        <ul style="list-style: none; font-size: 0.875rem; color: var(--mid);">
+          <li style="padding: 5px 0; border-bottom: 1px solid var(--light-border);">🏢 <strong>Budget:</strong> Dormitories at ashrams (₹300–₹600) or basic hotels (₹700–₹1,500)</li>
+          <li style="padding: 5px 0; border-bottom: 1px solid var(--light-border);">🏨 <strong>Mid-range:</strong> Hotel Ganga Kinare, Hotel Haveli Hari Ganga (₹2,000–₹4,000)</li>
+          <li style="padding: 5px 0;">🌿 <strong>Premium:</strong> Ananda in the Himalayas, Rishikesh (₹15,000+)</li>
+        </ul>
+        <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--stone);">Book 30–45 days in advance during peak season</p>
+      </div>
+      <div class="card">
+        <h3>🏔️ Rudraprayag / Guptkashi</h3>
+        <p style="margin: 0.5rem 0; font-size: 0.875rem; color: var(--mid);">Mountain stay options:</p>
+        <ul style="list-style: none; font-size: 0.875rem; color: var(--mid);">
+          <li style="padding: 5px 0; border-bottom: 1px solid var(--light-border);">🏢 <strong>Budget:</strong> GMVN Tourist Rest House (₹500–₹1,500)</li>
+          <li style="padding: 5px 0; border-bottom: 1px solid var(--light-border);">🏨 <strong>Mid-range:</strong> Hotel Valley View, Guptkashi (₹1,500–₹3,000)</li>
+          <li style="padding: 5px 0;">📞 <strong>Book via:</strong> gmvnl.com or direct hotel calls</li>
+        </ul>
+        <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--stone);">Guptkashi is the best place to stay before the trek — most comfortable</p>
+      </div>
+      <div class="card">
+        <h3>⛺ Gaurikund (Base Camp)</h3>
+        <p style="margin: 0.5rem 0; font-size: 0.875rem; color: var(--mid);">Limited but functional options:</p>
+        <ul style="list-style: none; font-size: 0.875rem; color: var(--mid);">
+          <li style="padding: 5px 0; border-bottom: 1px solid var(--light-border);">🏚️ <strong>Basic guesthouses:</strong> ₹600–₹1,500 per room (shared bathrooms common)</li>
+          <li style="padding: 5px 0; border-bottom: 1px solid var(--light-border);">🏕️ <strong>Tents:</strong> ₹400–₹800 per person</li>
+          <li style="padding: 5px 0;">⚠️ Book in advance — fills up fast during peak season</li>
+        </ul>
+        <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--stone);">Only stay here night before the trek. Facilities are basic</p>
+      </div>
+      <div class="card" style="border: 2px solid var(--saffron);">
+        <h3>🕉️ Kedarnath (Temple Town)</h3>
+        <p style="margin: 0.5rem 0; font-size: 0.875rem; color: var(--mid);">At the destination — MUST book in advance:</p>
+        <ul style="list-style: none; font-size: 0.875rem; color: var(--mid);">
+          <li style="padding: 5px 0; border-bottom: 1px solid var(--light-border);">🏕️ <strong>GMVN Tents/Camps:</strong> ₹800–₹2,000/person (book at gmvnl.com)</li>
+          <li style="padding: 5px 0; border-bottom: 1px solid var(--light-border);">🏠 <strong>Temple Trust Dharamshala:</strong> Basic but close to temple (₹300–₹800)</li>
+          <li style="padding: 5px 0;">⚡ <strong>Luxury camps:</strong> ₹5,000–₹12,000 (running water, heated tents)</li>
+        </ul>
+        <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--saffron);">Book 30–60 days in advance — slots vanish within hours of opening</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PACKING LIST -->
+<section class="section" id="packing">
+  <div class="container">
+    <div class="section-label">What to Carry</div>
+    <h2 class="section-title">Complete Packing Checklist</h2>
+    <p class="section-intro">Pack light but smart. You'll be carrying your bag on the trek — every kg matters. Aim for a bag under 10–12 kg.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-icon" style="background: var(--saffron-light);">🧥</div>
+        <h3>Clothing & Gear</h3>
+        <ul class="checklist">
+          <li><div class="check-box"></div><div><strong>Thermal inner wear (top + bottom)</strong><span>2 sets minimum — it's cold even in summer</span></div></li>
+          <li><div class="check-box"></div><div><strong>Warm fleece jacket or sweater</strong><span>Medium weight for layering</span></div></li>
+          <li><div class="check-box"></div><div><strong>Waterproof rain jacket / poncho</strong><span>Non-negotiable — rain hits without warning</span></div></li>
+          <li><div class="check-box"></div><div><strong>Trekking pants (2 pairs)</strong><span>Quick-dry fabric, not jeans — jeans are deadly when wet</span></div></li>
+          <li><div class="check-box"></div><div><strong>Good trekking boots / ankle support shoes</strong><span>Waterproof with grip soles</span></div></li>
+          <li><div class="check-box"></div><div><strong>Woollen socks (3–4 pairs)</strong><span>Merino wool preferred — prevents blisters</span></div></li>
+          <li><div class="check-box"></div><div><strong>Woollen cap / beanie</strong><span>Significant heat loss through head</span></div></li>
+          <li><div class="check-box"></div><div><strong>Gloves</strong><span>Lightweight but warm fleece gloves</span></div></li>
+          <li><div class="check-box"></div><div><strong>Sunglasses (UV protection)</strong><span>High-altitude UV is extremely intense</span></div></li>
+          <li><div class="check-box"></div><div><strong>Trekking poles / walking stick</strong><span>Rental available at Gaurikund too — ₹100–₹200</span></div></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-icon" style="background: var(--sky-light);">🩹</div>
+        <h3>Medical & Health</h3>
+        <ul class="checklist">
+          <li><div class="check-box"></div><div><strong>Diamox (Acetazolamide)</strong><span>For altitude sickness prevention — consult doctor before use</span></div></li>
+          <li><div class="check-box"></div><div><strong>ORS Sachets (10–15 packets)</strong><span>Critical for hydration at altitude</span></div></li>
+          <li><div class="check-box"></div><div><strong>Ibuprofen / Paracetamol</strong><span>For headaches and body pain</span></div></li>
+          <li><div class="check-box"></div><div><strong>Antacids & anti-diarrheal tablets</strong><span>Food change can upset stomach</span></div></li>
+          <li><div class="check-box"></div><div><strong>Bandages, antiseptic, blister pads</strong><span>Basic first aid essentials</span></div></li>
+          <li><div class="check-box"></div><div><strong>Pulse oximeter</strong><span>Monitor oxygen levels — critical for AMS detection</span></div></li>
+          <li><div class="check-box"></div><div><strong>Sunscreen SPF 50+</strong><span>Reapply every 2 hours at altitude</span></div></li>
+          <li><div class="check-box"></div><div><strong>Lip balm</strong><span>Cold dry air causes cracking fast</span></div></li>
+          <li><div class="check-box"></div><div><strong>Personal prescription medicines</strong><span>Carry extra — no pharmacies above Gaurikund</span></div></li>
+          <li><div class="check-box"></div><div><strong>Glucose/energy supplements</strong><span>Glucon-D sachets, energy bars, dry fruits</span></div></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-icon" style="background: var(--forest-light);">📋</div>
+        <h3>Documents & Money</h3>
+        <ul class="checklist">
+          <li><div class="check-box"></div><div><strong>Aadhaar Card (original + copies)</strong><span>Mandatory for registration at Sonprayag</span></div></li>
+          <li><div class="check-box"></div><div><strong>Passport / Voter ID (backup ID)</strong><span>Additional identification</span></div></li>
+          <li><div class="check-box"></div><div><strong>Train/flight tickets (printed + digital)</strong><span>Mobile signal unreliable in mountains</span></div></li>
+          <li><div class="check-box"></div><div><strong>Hotel booking confirmations</strong><span>Print copies — internet may not work</span></div></li>
+          <li><div class="check-box"></div><div><strong>Cash (₹10,000–₹15,000 per person)</strong><span>ATMs are limited and often out of cash. Last reliable ATM at Rudraprayag or Sonprayag</span></div></li>
+          <li><div class="check-box"></div><div><strong>Emergency contact list (physical copy)</strong><span>Save numbers offline too</span></div></li>
+          <li><div class="check-box"></div><div><strong>Travel insurance documents</strong><span>Highly recommended for trek + altitude risk</span></div></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-icon" style="background: var(--gold-light);">⚙️</div>
+        <h3>Essentials & Gadgets</h3>
+        <ul class="checklist">
+          <li><div class="check-box"></div><div><strong>Daypack (20–25L)</strong><span>Lightweight for the trek, leave big bag at Gaurikund</span></div></li>
+          <li><div class="check-box"></div><div><strong>Power bank (20,000 mAh)</strong><span>Charging points rare or unreliable above Gaurikund</span></div></li>
+          <li><div class="check-box"></div><div><strong>Headlamp / torch with extra batteries</strong><span>Essential for 4 AM temple starts</span></div></li>
+          <li><div class="check-box"></div><div><strong>Reusable water bottle (1–2L)</strong><span>Plastic waste is a serious issue in Himalayas</span></div></li>
+          <li><div class="check-box"></div><div><strong>Waterproof bag cover / dry bags</strong><span>Protect electronics and documents from rain</span></div></li>
+          <li><div class="check-box"></div><div><strong>Offline maps downloaded (Google Maps)</strong><span>Download Uttarakhand region offline before leaving</span></div></li>
+          <li><div class="check-box"></div><div><strong>Plastic carry bags (5–10)</strong><span>Wrap electronics, keep rubbish — leave no trace</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SAFETY -->
+<section class="section" id="safety">
+  <div class="container">
+    <div class="section-label">Stay Safe</div>
+    <h2 class="section-title">Safety Guide — Critical Information</h2>
+
+    <div class="alert alert-danger">
+      <div class="alert-icon">⚠️</div>
+      <div>
+        <h4>Acute Mountain Sickness (AMS) — Most Important Risk</h4>
+        <p>AMS affects many first-time Himalayan visitors. Symptoms: severe headache, nausea, vomiting, dizziness, confusion, shortness of breath. If symptoms appear, <strong>do NOT ascend further</strong>. Descend immediately if severe. Kedarnath is at 3,583m — your body needs time to adjust. Do not rush the ascent.</p>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top: 1.5rem;">
+      <div class="card">
+        <div class="card-icon" style="background: var(--danger-light);">🏔️</div>
+        <h3>Altitude Rules</h3>
+        <p>• Ascend gradually — don't rush<br>
+        • "Climb high, sleep low" principle<br>
+        • Drink 3–4 litres of water daily<br>
+        • Avoid alcohol and sleeping pills<br>
+        • Rest at Rudraprayag to acclimatize<br>
+        • Use pulse oximeter to monitor SpO2 (below 85% = danger)<br>
+        • Diamox — take 24 hrs before ascent if doctor-approved</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--gold-light);">⛈️</div>
+        <h3>Weather Safety</h3>
+        <p>• Start trek before 6 AM — reach before afternoon storms<br>
+        • Never trek in heavy rain or lightning<br>
+        • If thunder begins, seek shelter immediately<br>
+        • Check weather forecast daily (IMD app)<br>
+        • Do NOT attempt Gandhi Sarovar lake trek if clouds are forming<br>
+        • Keep raincoat accessible — not inside bag</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--forest-light);">🧭</div>
+        <h3>Trek Safety</h3>
+        <p>• Never trek alone — stay with group<br>
+        • Inform guesthouse of your trek plan daily<br>
+        • Don't leave the marked trail<br>
+        • Carry whistle for emergencies<br>
+        • Ponies have right-of-way — step aside<br>
+        • Don't stop in narrow spots to avoid crowd stampede<br>
+        • Carry headlamp for early morning starts</p>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top: 1.25rem;">
+      <div class="alert alert-warning">
+        <div class="alert-icon">💧</div>
+        <div>
+          <h4>Water & Food Safety</h4>
+          <ul>
+            <li>Only drink sealed bottled water or boiled water</li>
+            <li>Avoid raw salads, cut fruits from roadside stalls</li>
+            <li>Stick to hot cooked food (dal, rice, khichdi)</li>
+            <li>High altitude reduces appetite — eat even if not hungry</li>
+            <li>Carry ORS — altitude dehydration is common and dangerous</li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert alert-info">
+        <div class="alert-icon">📱</div>
+        <div>
+          <h4>Connectivity & Communication</h4>
+          <ul>
+            <li>BSNL network works best in mountains — consider a SIM</li>
+            <li>Airtel/Jio have patchy coverage above Gaurikund</li>
+            <li>No network at Kedarnath — download offline maps</li>
+            <li>Share your complete itinerary with family back in Surat</li>
+            <li>Satellite communicators (SPOT) available on rent for serious trekkers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-danger" style="margin-top: 1.25rem;">
+      <div class="alert-icon">🚨</div>
+      <div>
+        <h4>People Who Should NOT Trek / Consult Doctor First</h4>
+        <p>Those with heart conditions, severe asthma, high blood pressure, recent surgery, pregnancy, or any respiratory illness should consult a doctor before planning. People above 65 or below 5 years of age should consider helicopter-only visit. Never hide pre-existing medical conditions from your group or guide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- BUDGET -->
+<section class="section" id="budget">
+  <div class="container">
+    <div class="section-label">Cost Planning</div>
+    <h2 class="section-title">Budget Breakdown</h2>
+    <p class="section-intro">Estimated costs per person for an 8-day trip from Surat. Group travel significantly reduces per-person costs.</p>
+
+    <div class="two-col">
+      <div style="overflow-x: auto;">
+        <h3 style="font-family: var(--serif); margin-bottom: 1rem; font-size: 1.2rem;">Budget Option (₹ per person)</h3>
+        <table class="budget-table" style="border-radius: 12px; overflow: hidden; border: 1px solid var(--light-border);">
+          <thead>
+            <tr><th>Category</th><th class="cost">Amount (₹)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Train (Surat ↔ Haridwar, 3AC)</td><td class="cost">2,000–3,000</td></tr>
+            <tr><td>Local transport (shared taxis/buses)</td><td class="cost">1,500–2,500</td></tr>
+            <tr><td>Accommodation (7 nights, budget)</td><td class="cost">3,500–5,000</td></tr>
+            <tr><td>Food (₹400–₹600/day × 8 days)</td><td class="cost">3,200–4,800</td></tr>
+            <tr><td>Trek (pony one way, ponies optional)</td><td class="cost">0–2,500</td></tr>
+            <tr><td>Temple puja, entries, offerings</td><td class="cost">500–1,500</td></tr>
+            <tr><td>Emergency/miscellaneous cash</td><td class="cost">2,000</td></tr>
+            <tr><td><strong>Total (Budget)</strong></td><td class="cost"><strong>₹12,700–₹21,300</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <h3 style="font-family: var(--serif); margin-bottom: 1rem; font-size: 1.2rem;">Comfortable Option (₹ per person)</h3>
+        <table class="budget-table" style="border-radius: 12px; overflow: hidden; border: 1px solid var(--light-border);">
+          <thead>
+            <tr><th>Category</th><th class="cost">Amount (₹)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Flight (Surat/Ahmedabad ↔ Dehradun)</td><td class="cost">7,000–14,000</td></tr>
+            <tr><td>Private cab transport</td><td class="cost">4,000–7,000</td></tr>
+            <tr><td>Accommodation (7 nights, mid-range)</td><td class="cost">9,000–14,000</td></tr>
+            <tr><td>Food & drinks (restaurants)</td><td class="cost">5,000–8,000</td></tr>
+            <tr><td>Helicopter (Phata ↔ Kedarnath, 2-way)</td><td class="cost">7,000–12,000</td></tr>
+            <tr><td>Puja, offerings, souvenirs</td><td class="cost">2,000–5,000</td></tr>
+            <tr><td>Emergency/miscellaneous cash</td><td class="cost">3,000</td></tr>
+            <tr><td><strong>Total (Comfortable)</strong></td><td class="cost"><strong>₹37,000–₹63,000</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 1.5rem; background: var(--forest-light); border-color: #C0DAB8;">
+      <h4 style="color: var(--forest);">Group Travel Savings Tip</h4>
+      <p>Travelling in a group of 6–8 people can cut transport costs by 40–60%. Share private cabs/SUVs (Innova/Tempo Traveller handles 7–8 people) and split accommodation costs. A group of 8 from Surat can complete this trip comfortably for ₹18,000–₹25,000/person inclusive of everything.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PRO TIPS -->
+<section class="section" id="tips">
+  <div class="container">
+    <div class="section-label">Insider Knowledge</div>
+    <h2 class="section-title">Pro Tips from Experienced Pilgrims</h2>
+
+    <div class="grid-2">
+      <div>
+        <div class="tip-box">
+          <div class="tip-icon">🌅</div>
+          <div class="tip-text"><strong>Start the Trek at 4–5 AM</strong>Avoid the afternoon crowd, reach temple by late morning, and get the best mountain light for views. The trail is much quieter and safer in early morning.</div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-icon">📲</div>
+          <div class="tip-text"><strong>Download the Devasthanam App</strong>The official BKTC app has temple timings, weather, puja booking, and registration. Download before leaving — no internet above Gaurikund.</div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-icon">💳</div>
+          <div class="tip-text"><strong>Withdraw Cash at Rudraprayag</strong>This is your last reliable ATM point. Carry extra cash — digital payments barely work above Gaurikund and many dhabas are cash-only.</div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-icon">🎒</div>
+          <div class="tip-text"><strong>Leave Big Bags at Gaurikund</strong>Leave your large luggage at your guesthouse in Gaurikund (paid locker service available). Carry only a 20L daypack for the trek to Kedarnath and back.</div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-icon">🌿</div>
+          <div class="tip-text"><strong>Respect the Environment</strong>Do not litter — Kedarnath and its surroundings are fragile ecosystems. Carry your trash back down. Plastic bags are banned in the area. Use reusable water bottles.</div>
+        </div>
+      </div>
+      <div>
+        <div class="tip-box">
+          <div class="tip-icon">📸</div>
+          <div class="tip-text"><strong>Best Photography Spots</strong>Bhairavnath Temple hilltop (360° panorama), Kedarnath Temple at dawn, Chorabari Lake reflection, Lincholi meadows, Mandakini River valley from above Bheembali.</div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-icon">🍽️</div>
+          <div class="tip-text"><strong>Gujarati-Friendly Food Tip</strong>You'll find plenty of vegetarian food all along the route. Stock up on dry snacks from Surat — chakli, mathri, energy bars. At higher altitudes, eat simple foods like khichdi, dal, and rice.</div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-icon">🧘</div>
+          <div class="tip-text"><strong>Pace Yourself, Don't Race</strong>This is not a competition. Trek slowly and steadily. Rapid ascent is the #1 cause of AMS. Take regular breaks at Jungle Chatti and Bheembali. The temple will wait.</div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-icon">🎫</div>
+          <div class="tip-text"><strong>Book Everything 45–60 Days in Advance</strong>During May–June peak, accommodation at Kedarnath and helicopter slots sell out within hours of going live. Set calendar reminders for booking opening dates.</div>
+        </div>
+        <div class="tip-box">
+          <div class="tip-icon">🧴</div>
+          <div class="tip-text"><strong>Break In Your Boots Before the Trek</strong>Wear new trekking boots on walks for 2–3 weeks before departure. Blisters from stiff new boots on a 16-km mountain trek are extremely painful.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EMERGENCY CONTACTS -->
+<section class="section" id="emergency">
+  <div class="container">
+    <div class="section-label">Help & Contacts</div>
+    <h2 class="section-title">Emergency Contacts & Resources</h2>
+
+    <div class="grid-2">
+      <div>
+        <div class="emergency-box">
+          <h4>🚨 Emergency Numbers</h4>
+          <div class="contact-row"><span>National Emergency</span><span>112</span></div>
+          <div class="contact-row"><span>Police</span><span>100</span></div>
+          <div class="contact-row"><span>Ambulance</span><span>108</span></div>
+          <div class="contact-row"><span>SDRF Uttarakhand (Rescue)</span><span>9557444486</span></div>
+          <div class="contact-row"><span>Kedarnath Medical Post</span><span>01364-263132</span></div>
+          <div class="contact-row"><span>Guptkashi Hospital</span><span>01364-262042</span></div>
+          <div class="contact-row"><span>Rudraprayag District Control</span><span>01364-233360</span></div>
+          <div class="contact-row"><span>GMVN Helpline</span><span>0135-2746817</span></div>
+        </div>
+
+        <div class="alert alert-info">
+          <div class="alert-icon">🏥</div>
+          <div>
+            <h4>Medical Posts on Trek Route</h4>
+            <p>The government maintains medical posts at <strong>Jungle Chatti</strong>, <strong>Bheembali</strong>, and <strong>Kedarnath</strong>. ITBP (Indo-Tibetan Border Police) personnel patrol the route and assist distressed trekkers. First aid is available free at all posts.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom: 1.25rem;">
+          <h3>🔗 Useful Links & Apps</h3>
+          <ul style="list-style: none; font-size: 0.875rem; color: var(--mid);">
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--light-border);">📌 <strong style="color: var(--dark);">Registration:</strong> devasthanam.uk.gov.in</li>
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--light-border);">🚁 <strong style="color: var(--dark);">Helicopter booking:</strong> irctc.co.in / heliyatra.irctc.co.in</li>
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--light-border);">🏕️ <strong style="color: var(--dark);">GMVN accommodation:</strong> gmvnl.com</li>
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--light-border);">⛅ <strong style="color: var(--dark);">Weather:</strong> mausam.imd.gov.in (IMD)</li>
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--light-border);">🛕 <strong style="color: var(--dark);">Temple Trust:</strong> badrinath-kedarnath.com</li>
+            <li style="padding: 7px 0;">🚂 <strong style="color: var(--dark);">Train booking:</strong> irctc.co.in</li>
+          </ul>
+        </div>
+
+        <div class="alert alert-success">
+          <div class="alert-icon">🛡️</div>
+          <div>
+            <h4>Travel Insurance — Do Not Skip</h4>
+            <p>Strongly recommended for trekking trips. Ensure policy covers <strong>high-altitude trekking, helicopter evacuation, and medical emergencies</strong>. Providers: Care Health, ICICI Lombard, Bajaj Allianz all offer trek-specific policies. Cost: ₹500–₹1,500 per person for 10-day coverage.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 1.5rem; background: var(--saffron-light); border-color: #F2C4A0; text-align: center; padding: 2rem;">
+      <h4 style="color: var(--saffron); font-size: 1.2rem; font-family: var(--serif);">हर हर महादेव 🙏</h4>
+      <p style="font-size: 1rem; color: var(--mid); margin-top: 0.5rem;">Wishing your group from Surat a safe, blessed, and transformative Kedarnath Yatra. May Lord Shiva guide every step of your journey. The mountains are calling!</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🕉️</div>
+  <p><strong>Kedarnath Tour Guide</strong> — Crafted for travellers from Surat</p>
+  <p style="margin-top: 0.5rem; font-size: 0.8rem;">Information is for planning reference. Always verify current conditions, temple timings, and bookings closer to travel date. Mountain conditions can change rapidly — stay informed and travel responsibly.</p>
+</footer>
+
+</body>
+</html>
